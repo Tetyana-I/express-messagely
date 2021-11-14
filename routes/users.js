@@ -1,7 +1,5 @@
 const express = require("express");
 const router = new express.Router();
-const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../config");
 const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
 const User = require("../models/user");
 
@@ -22,7 +20,7 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
 /** GET /:username - get detail of users.
  * => {user: {username, first_name, last_name, phone, join_at, last_login_at}}
  **/
- router.get('/:username', ensureCorrectUser, async (req, res, next) => {
+router.get('/:username', ensureCorrectUser, async (req, res, next) => {
     try {
         const { username } = req.params;
         const user = await User.get(username);
@@ -40,7 +38,7 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
  *                 read_at,
  *                 from_user: {username, first_name, last_name, phone}}, ...]}
  **/
- router.get('/:username/to', ensureCorrectUser, async (req, res, next) => {
+router.get('/:username/to', ensureCorrectUser, async (req, res, next) => {
     try {
         const { username } = req.params;
         const messages_to = await User.messagesTo(username);
@@ -58,7 +56,7 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
  *                 read_at,
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  **/
- router.get('/:username/from', ensureCorrectUser, async (req, res, next) => {
+router.get('/:username/from', ensureCorrectUser, async (req, res, next) => {
     try {
         const { username } = req.params;
         const messages_from = await User.messagesFrom(username);
@@ -68,4 +66,4 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
     }
 })
 
- module.exports = router;
+module.exports = router;
