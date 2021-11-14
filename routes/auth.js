@@ -1,11 +1,8 @@
 const express = require("express");
 const router = new express.Router();
 const ExpressError = require("../expressError");
-const db = require("../db");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { BCRYPT_WORK_FACTOR, SECRET_KEY } = require("../config");
-const { authenticateJWT, ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+const { SECRET_KEY } = require("../config");
 const User = require("../models/user");
   
 
@@ -17,7 +14,7 @@ const User = require("../models/user");
 router.post('/login', async (req, res, next) => {
     try {
         const { username, password } = req.body;
-        is_user = await User.authenticate(username, password);
+        const is_user = await User.authenticate(username, password);
         if (is_user) {
             const token = jwt.sign({ username }, SECRET_KEY);
             User.updateLoginTimestamp(username);
@@ -39,7 +36,7 @@ router.post('/login', async (req, res, next) => {
  router.post('/register', async (req, res, next) => {
     try {
       const { username, password, first_name, last_name, phone } = req.body;
-      user = await User.register({username, password, first_name, last_name, phone});
+      const user = await User.register({username, password, first_name, last_name, phone});
       if (user) {
         const token = jwt.sign({ username }, SECRET_KEY);
         User.updateLoginTimestamp(username);
